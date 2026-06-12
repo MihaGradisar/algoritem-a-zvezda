@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtualno okolje
+venv/
+.venv/
+env/
+
+# Urejevalnik / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
