@@ -1,6 +1,48 @@
 # Iskanje z algoritmom A*
 
-Cilj je razumeti in uporabiti algoritem A* (A-star) za iskanje najcenejše poti ter rezultat predstaviti v kratkem poročilu.
+Cilj naloge je razumeti in uporabiti algoritem A* (A-star) za iskanje najcenejše poti.
+
+## Kako deluje A*
+
+A* išče najcenejšo pot skozi graf. Vsakemu vozlišču pripiše tri števila:
+
+- **g** = cena že prehojene poti od starta do tega vozlišča,
+- **h** = hevristika, ocena, koliko je od tu še do cilja,
+- **f = g + h** = ocena celotne poti, ki gre skozi to vozlišče.
+
+V vsakem koraku A* iz seznama **OPEN** (vozlišča, ki čakajo) vzame vozlišče z **najmanjšim f**, ga premakne v **CLOSED** (obdelana vozlišča) in pogleda njegove sosede. Ker f združuje že prehojeno pot in oceno preostanka, se iskanje usmerja proti cilju in mu ni treba pregledati celega grafa.
+
+![Diagram poteka algoritma A*](potek.png)
+
+### Primer
+
+Majhno cestno omrežje med slovenskimi mesti (isto kot v `a_zvezda.py`), **start Koper, cilj Murska Sobota**. Povezave s ceno v km:
+
+```
+Koper-Postojna 55        Celje-Velenje 30         Maribor-Ptuj 28
+Postojna-Ljubljana 53    Celje-Maribor 55         Maribor-Murska Sobota 58
+Ljubljana-Celje 75       Novo mesto-Maribor 100   Ptuj-Murska Sobota 32
+Ljubljana-Novo mesto 72  Velenje-Maribor 42
+```
+
+Hevristika h (ocena zračne razdalje do Murske Sobote, v km):
+
+```
+Koper 250   Postojna 210   Ljubljana 160   Celje 95   Novo mesto 135
+Velenje 85  Maribor 50     Ptuj 28         Murska Sobota 0
+```
+
+Graf in najdena optimalna pot (rdeča vozlišča):
+
+![Graf primera z najdeno optimalno potjo](graf.png)
+
+Prvi koraki na tem primeru:
+
+1. V OPEN je samo **Koper** (f = 0 + 250 = 250). Vzamemo ga, sosed **Postojna** dobi g = 55, f = 55 + 210 = **265**.
+2. Na vrsti je **Postojna** (265). Sosed **Ljubljana**: g = 108, f = 108 + 160 = **268**.
+3. Na vrsti je **Ljubljana** (268). Soseda **Celje** (f = 278) in **Novo mesto** (f = 315).
+
+Tako A* nadaljuje, dokler iz OPEN ne potegne cilja. Končna pot je **Koper, Postojna, Ljubljana, Celje, Maribor in Murska Sobota**, skupaj **296 km**. Celoten potek po korakih je v vzorčnem poročilu.
 
 ## Kaj se študent nauči
 
@@ -12,7 +54,7 @@ Cilj je razumeti in uporabiti algoritem A* (A-star) za iskanje najcenejše poti 
 
 ## Naloga
 
-Implementiraj A* in ga uporabi na problemu, ki si ga izbereš sam. Uporabiš ga lahko povsod, kjer iščeš najcenejšo pot skozi prostor stanj in imaš hevristiko za oceno oddaljenosti do cilja. Nekaj možnih problemov:
+Implementiraj A* in ga uporabi na problemu, ki si ga izbereš sam. Uporaben je povsod, kjer iščeš najcenejšo pot in imaš hevristiko do cilja. Nekaj primerov:
 
 - pot na cestnem ali mestnem zemljevidu,
 - pot v mreži (grid) za igro ali robota, s Manhattansko ali evklidsko razdaljo kot hevristiko,
@@ -29,21 +71,21 @@ Sam definiraj vozlišča, povezave s stroški, začetno in ciljno stanje ter hev
 4. Rekonstruiraj končno pot in izračunaj skupni strošek.
 5. Oceni optimalnost (je hevristika dopustna in konsistentna?).
 6. Implementiraj A* v Pythonu (priporočeno: `heapq` za OPEN, slovarji za graf in hevristiko). Koda naj izpiše potek in ga vizualizira.
-7. Oddaj poročilo v PDF, 3–4 strani z grafi in razlago.
+7. Oddaj poročilo v PDF, 3-4 strani z grafi in razlago.
 
 ## Primer v tem repozitoriju
 
-Priložen primer reši konkreten primerek: pot med slovenskimi mesti od Kopra do Murske Sobote. Služi le kot vzorec poročila in kode. Tvoj problem je lahko drugačen.
+Vzorčno poročilo reši zgornji primer in prikaže celoten potek po korakih.
 
-- `a_zvezda.py` – celotna rešitev (podatki, algoritem, izris). Za drug problem spremeniš podatke na vrhu datoteke.
-- `algoritem_a_zvezda.pdf` – vzorčno poročilo.
-- `slika1_graf.png`, `slika2_f.png` – grafa, ki ju ustvari koda.
+- `a_zvezda.py` - celotna rešitev (podatki, algoritem, izris). Za drug problem spremeniš podatke na vrhu datoteke.
+- `algoritem_a_zvezda.pdf` - vzorčno poročilo.
+- `slika1_graf.png`, `slika2_f.png` - grafa, ki ju ustvari koda.
 
 ## Zagon
 
 ```bash
 python -m venv venv
-source venv/bin/activate # Windows: venv\Scripts\activate
+source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install networkx matplotlib
 python a_zvezda.py
 ```
